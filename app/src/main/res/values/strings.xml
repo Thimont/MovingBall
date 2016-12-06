@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MovingBall</string>
+    <string name="frame_rate">Frame Rate</string>
+    <string name="xSpeed">xSpeed</string>
+    <string name="ySpeed">ySpeed</string>
+    <string name="points">Points</string>
+    <string name="play">Play</string>
+</resources>
