@@ -1,6 +1,7 @@
 package com.example.flthiebl.movingball;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -10,6 +11,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 /**
  * Created by flthiebl on 04/11/2016.
@@ -35,6 +37,11 @@ public class AnimatedView extends ImageView {
     int black_barX = 500;
 
     private Paint paint = null;
+
+    BitmapDrawable restart = (BitmapDrawable) mContext.getResources().getDrawable(R.drawable.restart, null);
+
+    int restartX = this.getWidth()/2 - restart.getBitmap().getWidth()/2;
+    int restartY = this.getHeight()/4;
 
     private GestureDetector mgd;
 
@@ -75,12 +82,12 @@ public class AnimatedView extends ImageView {
         }
 
         paint = new Paint();
-        paint.setColor(Color.RED);
+        paint.setColor(Color.BLACK);
         paint.setTextSize(50);
 
         black_barY = this.getHeight()/100*98;
 
-        if((x > this.getWidth() - ball.getBitmap().getWidth()) || (x < 0)){
+        if((x > this.getWidth() - ball.getBitmap().getWidth()) || (x < 0)) {
                 xVelocity = xVelocity*-1;
             }
 
@@ -88,15 +95,26 @@ public class AnimatedView extends ImageView {
             yVelocity = yVelocity*-1;
         }
 
-        if(y < 0){
+        if(y < 0) {
             yVelocity = yVelocity*-1;
             playerPoints ++;
-
         }
 
-        if(y > (this.getHeight() - ball.getBitmap().getHeight())){
+        if(y > (this.getHeight() - ball.getBitmap().getHeight())) {
             yVelocity = yVelocity*-1;
             computerPoints ++;
+        }
+
+        if(playerPoints == points || computerPoints == points) {
+            xVelocity = 0;
+            yVelocity = 0;
+            x = this.getWidth()/2 - ball.getBitmap().getWidth()/2;
+            y = this.getHeight()/5 - ball.getBitmap().getHeight()/2;
+            if(playerPoints > computerPoints) {
+                c.drawText("Victory !", this.getWidth()/3, this.getHeight()/10*7, paint);
+            } else
+                c.drawText("Game over :(", this.getWidth()/3, this.getHeight()/10*7, paint);
+            c.drawBitmap(restart.getBitmap(), restartX, restartY, null);
         }
 
         if(black_barX <= 0)
@@ -126,6 +144,12 @@ public class AnimatedView extends ImageView {
 
         @Override
         public boolean onSingleTapUp(MotionEvent motionEvent) {
+            if(motionEvent.getX() >= restartX
+            && motionEvent.getX() <= (restartX + restart.getBitmap().getWidth())
+            && motionEvent.getY() >= restartY
+            && motionEvent.getY() <= (restartY + restart.getBitmap().getHeight())) {
+                startActivity()
+            }
             return true;
         }
 
@@ -143,20 +167,6 @@ public class AnimatedView extends ImageView {
 
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            /*int tangente = (int) Math.abs((e2.getY() - e1.getY()) / (e2.getX() - e1.getX()));
-
-            if(velocityX < 0){
-                xVelocity = 10;
-            } else {
-                xVelocity = 10;
-            }
-
-            if(velocityY < 0){
-                yVelocity = -tangente * 10;
-            } else {
-                yVelocity = tangente * 10;
-            }*/
-
             return true;
         }
     }
