@@ -33,15 +33,12 @@ public class AnimatedView extends ImageView {
     private int yVelocity;
     private Handler h;
 
+    BitmapDrawable black_bar;
+
     int black_barY;
     int black_barX = 500;
 
     private Paint paint = null;
-
-    BitmapDrawable restart = (BitmapDrawable) mContext.getResources().getDrawable(R.drawable.restart, null);
-
-    int restartX = this.getWidth()/2 - restart.getBitmap().getWidth()/2;
-    int restartY = this.getHeight()/4;
 
     private GestureDetector mgd;
 
@@ -71,7 +68,7 @@ public class AnimatedView extends ImageView {
 
     protected void onDraw(Canvas c){
         BitmapDrawable ball = (BitmapDrawable) mContext.getResources().getDrawable(R.drawable.ball, null);
-        BitmapDrawable black_bar = (BitmapDrawable) mContext.getResources().getDrawable(R.drawable.black_bar, null);
+        black_bar = (BitmapDrawable) mContext.getResources().getDrawable(R.drawable.black_bar, null);
 
         if(x < 0 && y < 0){
             x = this.getWidth()/2;
@@ -114,7 +111,7 @@ public class AnimatedView extends ImageView {
                 c.drawText("Victory !", this.getWidth()/3, this.getHeight()/10*7, paint);
             } else
                 c.drawText("Game over :(", this.getWidth()/3, this.getHeight()/10*7, paint);
-            c.drawBitmap(restart.getBitmap(), restartX, restartY, null);
+            //c.drawBitmap(restart.getBitmap(), restartX, restartY, null);
         }
 
         if(black_barX <= 0)
@@ -144,18 +141,18 @@ public class AnimatedView extends ImageView {
 
         @Override
         public boolean onSingleTapUp(MotionEvent motionEvent) {
-            if(motionEvent.getX() >= restartX
-            && motionEvent.getX() <= (restartX + restart.getBitmap().getWidth())
-            && motionEvent.getY() >= restartY
-            && motionEvent.getY() <= (restartY + restart.getBitmap().getHeight())) {
-                startActivity()
-            }
             return true;
         }
 
         @Override
         public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-            black_barX += (motionEvent1.getX() - motionEvent.getX())/15;
+            /*if(motionEvent.getX() >= black_barX &&
+                    motionEvent.getX() <= black_barX + black_bar.getBitmap().getWidth() &&
+                    motionEvent.getY() >= black_barY &&
+                    motionEvent.getY() <= black_barY + black_bar.getBitmap().getHeight()) {*/
+
+                black_barX -= v;
+            //}
 
             return true;
         }
